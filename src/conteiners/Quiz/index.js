@@ -7,7 +7,7 @@ class Quiz extends Component {
   state = {
     results: {}, // { [id]: 'success' or 'error' }
     isFinished: false,
-    activQuestion: 0,
+    activeQuestion: 0,
     answerState: null, // { [id]: 'success' or 'error' }
     quiz: [
       {
@@ -24,6 +24,17 @@ class Quiz extends Component {
       {
         id: 2,
         question: 'В каком году основали Санкт-Петербург?',
+        answers: [
+          { text: '1700', id: 1 },
+          { text: '1702', id: 2 },
+          { text: '1703', id: 3 },
+          { text: '1803', id: 4 },
+        ],
+        rightAnswerId: 3,
+      },
+      {
+        id: 3,
+        question: 'В каком году основали Москву?',
         answers: [
           { text: '1700', id: 1 },
           { text: '1702', id: 2 },
@@ -52,7 +63,7 @@ class Quiz extends Component {
       }
     }
 
-    const question = this.state.quiz[this.state.activQuestion];
+    const question = this.state.quiz[this.state.activeQuestion];
     const results = this.state.results;
 
     if (question.rightAnswerId === answerId) {
@@ -73,7 +84,7 @@ class Quiz extends Component {
           });
         } else {
           this.setState({
-            activQuestion: this.state.activQuestion + 1,
+            activeQuestion: this.state.activeQuestion + 1,
             answerState: null,
           });
         }
@@ -88,11 +99,11 @@ class Quiz extends Component {
   };
 
   isQuizFinished() {
-    return this.state.activQuestion + 1 === this.state.quiz.length;
+    return this.state.activeQuestion + 1 === this.state.quiz.length;
   }
 
   render() {
-    const { activQuestion, quiz, results, answerState } = this.state;
+    const { activeQuestion, quiz, results, answerState } = this.state;
     return (
       <div className={styles.Quiz}>
         <div className={styles.QuizWrapper}>
@@ -105,10 +116,10 @@ class Quiz extends Component {
             />
           ) : (
             <ActiveQuiz
-              question={quiz[activQuestion].question}
-              answers={quiz[activQuestion].answers}
+              question={quiz[activeQuestion].question}
+              answers={quiz[activeQuestion].answers}
               quizLength={quiz.length}
-              answerNumber={activQuestion + 1}
+              answerNumber={activeQuestion + 1}
               state={answerState}
               onAnswerClick={this.onAnswerClickHandler}
             />

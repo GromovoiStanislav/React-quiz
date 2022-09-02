@@ -1,4 +1,5 @@
 import styles from './style.module.css';
+import Button from '../UI/Button';
 
 const FinishedQuiz = ({ quiz, results, onRetry }) => {
   let successCount = Object.keys(results).reduce((total, key) => {
@@ -11,7 +12,7 @@ const FinishedQuiz = ({ quiz, results, onRetry }) => {
     <div className={styles.FinishedQuiz}>
       <ul>
         {quiz.map((quizItem, index) => {
-          const cls = [
+          const classes = [
             'fa',
             results[quizItem.id] === 'error' ? 'fa-times' : 'fa-check',
             styles[results[quizItem.id]],
@@ -21,7 +22,7 @@ const FinishedQuiz = ({ quiz, results, onRetry }) => {
             <li key={index}>
               <strong>{index + 1}</strong>.&nbsp;
               {quizItem.question}
-              <i className={cls.join(' ')} />
+              <i className={classes.join(' ')} />
             </li>
           );
         })}
@@ -30,7 +31,10 @@ const FinishedQuiz = ({ quiz, results, onRetry }) => {
         Правильно {successCount} из {quiz.length}
       </p>
       <div>
-        <button onClick={onRetry}>Повторить</button>
+        <Button type={'primary'} onClick={onRetry}>
+          Повторить
+        </Button>
+        <Button type={'success'}>Перейти в список тестов</Button>
       </div>
     </div>
   );
