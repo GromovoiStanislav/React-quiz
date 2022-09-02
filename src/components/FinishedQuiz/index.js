@@ -1,23 +1,36 @@
 import styles from './style.module.css';
 
-const FinishedQuiz = () => {
+const FinishedQuiz = ({ quiz, results, onRetry }) => {
+  let successCount = Object.keys(results).reduce((total, key) => {
+    if (results[key] === 'success') {
+      total++;
+    }
+    return total;
+  }, 0);
   return (
     <div className={styles.FinishedQuiz}>
       <ul>
-        <li>
-          <strong>1.</strong>
-          Finished
-          <i className={'fa fa-times ' + styles.error} />
-        </li>
-        <li>
-          <strong>2.</strong>
-          Finished
-          <i className={'fa fa-check ' + styles.success} />
-        </li>
+        {quiz.map((quizItem, index) => {
+          const cls = [
+            'fa',
+            results[quizItem.id] === 'error' ? 'fa-times' : 'fa-check',
+            styles[results[quizItem.id]],
+          ];
+
+          return (
+            <li key={index}>
+              <strong>{index + 1}</strong>.&nbsp;
+              {quizItem.question}
+              <i className={cls.join(' ')} />
+            </li>
+          );
+        })}
       </ul>
-      <p>Правильно 4 из 10</p>
+      <p>
+        Правильно {successCount} из {quiz.length}
+      </p>
       <div>
-        <button>Повторить</button>
+        <button onClick={onRetry}>Повторить</button>
       </div>
     </div>
   );
