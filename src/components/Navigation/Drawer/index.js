@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styles from './style.module.css';
+import Backdrop from '../../UI/Backdrop';
 
 const links = [1, 2, 3];
 
@@ -22,9 +23,12 @@ class Drawer extends Component {
     }
 
     return (
-      <nav className={classes.join(' ')}>
-        <ul>{this.renderLinks()}</ul>
-      </nav>
+      <>
+        <nav className={classes.join(' ')}>
+          <ul>{this.renderLinks()}</ul>
+        </nav>
+        {this.props.isOpen && <Backdrop onClick={this.props.onClose} />}
+      </>
     );
   }
 }
