@@ -5,6 +5,7 @@ const ActiveQuiz = ({
   question,
   answers,
   answerNumber,
+  state,
   quizLength,
   onAnswerClick,
 }) => (
@@ -18,7 +19,11 @@ const ActiveQuiz = ({
         {answerNumber} из {quizLength}
       </small>
     </p>
-    <AnswersList answers={answers} onAnswerClick={onAnswerClick} />
+    <AnswersList
+      state={state}
+      answers={answers}
+      onAnswerClick={onAnswerClick}
+    />
   </div>
 );
 
