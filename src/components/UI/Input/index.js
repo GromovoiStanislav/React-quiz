@@ -8,7 +8,7 @@ const Input = ({
   type = 'text',
   label,
   value,
-  onCange,
+  onChange,
   errorMessage,
   valid,
   touched,
@@ -26,7 +26,7 @@ const Input = ({
     <div className={classes.join(' ')}>
       <label>
         {label}
-        <input type={type} value={value} onCange={onCange} />
+        <input type={type} value={value} onChange={onChange} />
       </label>
 
       {isInvalid ? (
