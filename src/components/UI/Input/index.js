@@ -1,6 +1,6 @@
 import styles from './style.module.css';
 
-function isInvalidFn({ valid, touched, shouldValidate }) {
+function isInvalidFn(valid, touched, shouldValidate) {
   return !valid && shouldValidate && touched;
 }
 
@@ -10,11 +10,14 @@ const Input = ({
   value,
   onCange,
   errorMessage,
-  validation = {},
+  valid,
+  touched,
+  shouldValidate,
 }) => {
   const classes = [styles.Input];
 
-  const isInvalid = isInvalidFn(validation);
+  const isInvalid = isInvalidFn(valid, touched, shouldValidate);
+
   if (isInvalid) {
     classes.push(styles.invalid);
   }
@@ -25,7 +28,6 @@ const Input = ({
         {label}
         <input type={type} value={value} onCange={onCange} />
       </label>
-      <span>{errorMessage}</span>
 
       {isInvalid ? (
         <span>{errorMessage || 'Введите верное значение'}</span>
