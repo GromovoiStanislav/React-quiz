@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import styles from './style.module.css';
 import ActiveQuiz from '../../components/ActiveQuiz';
 import FinishedQuiz from '../../components/FinishedQuiz';
-import axios from 'axios';
+import axios from '../../axios/axios-quiz';
 import withRouter from '../../hoc/withRouter';
+import Loader from '../../components/UI/Loader';
 
 class Quiz extends Component {
   state = {
@@ -11,41 +12,8 @@ class Quiz extends Component {
     isFinished: false,
     activeQuestion: 0,
     answerState: null, // { [id]: 'success' or 'error' }
-    quiz: [
-      {
-        id: 1,
-        question: 'Какого цвета небо?',
-        answers: [
-          { text: 'Чёрный', id: 1 },
-          { text: 'Синий', id: 2 },
-          { text: 'Красный', id: 3 },
-          { text: 'Зеленый', id: 4 },
-        ],
-        rightAnswerId: 2,
-      },
-      {
-        id: 2,
-        question: 'В каком году основали Санкт-Петербург?',
-        answers: [
-          { text: '1700', id: 1 },
-          { text: '1702', id: 2 },
-          { text: '1703', id: 3 },
-          { text: '1803', id: 4 },
-        ],
-        rightAnswerId: 3,
-      },
-      {
-        id: 3,
-        question: 'В каком году основали Москву?',
-        answers: [
-          { text: '1700', id: 1 },
-          { text: '1702', id: 2 },
-          { text: '1703', id: 3 },
-          { text: '1803', id: 4 },
-        ],
-        rightAnswerId: 3,
-      },
-    ],
+    quiz: [],
+    loading: true,
   };
 
   onRetryHandler = () => {
@@ -105,30 +73,28 @@ class Quiz extends Component {
   }
 
   async componentDidMount() {
-    // try {
-    //   const response = await axios.get(
-    //     'https://react-quiz-e85cc-default-rtdb.firebaseio.com/quizes.json'
-    //   );
+    try {
+      const response = await axios.get(
+        `/quizes/${this.props.router.params.id}.json`
+      );
+      const quiz = response.data;
 
-    //   const quizes = [];
-    //   Object.keys(response.data).forEach((key, index) => {
-    //     quizes.push({ id: key, name: `Тест №${index + 1}` });
-    //   });
-
-    //   this.setState({ quizes, loading: false });
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    console.log(this.props.router.params.id);
+      this.setState({ quiz, loading: false });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   render() {
-    const { activeQuestion, quiz, results, answerState } = this.state;
+    const { activeQuestion, quiz, results, answerState, loading } = this.state;
     return (
       <div className={styles.Quiz}>
         <div className={styles.QuizWrapper}>
           <h1>Ответьте на все вопросы</h1>
-          {this.state.isFinished ? (
+
+          {loading ? (
+            <Loader />
+          ) : this.state.isFinished ? (
             <FinishedQuiz
               results={results}
               quiz={quiz}
