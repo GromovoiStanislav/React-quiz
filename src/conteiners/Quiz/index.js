@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import styles from './style.module.css';
 import ActiveQuiz from '../../components/ActiveQuiz';
 import FinishedQuiz from '../../components/FinishedQuiz';
+import axios from 'axios';
+import withRouter from '../../hoc/withRouter';
 
 class Quiz extends Component {
   state = {
@@ -102,6 +104,24 @@ class Quiz extends Component {
     return this.state.activeQuestion + 1 === this.state.quiz.length;
   }
 
+  async componentDidMount() {
+    // try {
+    //   const response = await axios.get(
+    //     'https://react-quiz-e85cc-default-rtdb.firebaseio.com/quizes.json'
+    //   );
+
+    //   const quizes = [];
+    //   Object.keys(response.data).forEach((key, index) => {
+    //     quizes.push({ id: key, name: `Тест №${index + 1}` });
+    //   });
+
+    //   this.setState({ quizes, loading: false });
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    console.log(this.props.router.params.id);
+  }
+
   render() {
     const { activeQuestion, quiz, results, answerState } = this.state;
     return (
@@ -130,4 +150,4 @@ class Quiz extends Component {
   }
 }
 
-export default Quiz;
+export default withRouter(Quiz);
