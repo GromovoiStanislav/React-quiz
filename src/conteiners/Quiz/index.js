@@ -1,21 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import styles from './style.module.css';
 import ActiveQuiz from '../../components/ActiveQuiz';
 import FinishedQuiz from '../../components/FinishedQuiz';
-import axios from '../../axios/axios-quiz';
 import withRouter from '../../hoc/withRouter';
 import Loader from '../../components/UI/Loader';
+import { fetchQuizById } from '../../store/actions/quiz';
 
 class Quiz extends Component {
-  state = {
-    results: {}, // { [id]: 'success' or 'error' }
-    isFinished: false,
-    activeQuestion: 0,
-    answerState: null, // { [id]: 'success' or 'error' }
-    quiz: [],
-    loading: true,
-  };
-
   onRetryHandler = () => {
     this.setState({
       activeQuestion: 0,
@@ -72,29 +64,21 @@ class Quiz extends Component {
     return this.state.activeQuestion + 1 === this.state.quiz.length;
   }
 
-  async componentDidMount() {
-    try {
-      const response = await axios.get(
-        `/quizes/${this.props.router.params.id}.json`
-      );
-      const quiz = response.data;
-
-      this.setState({ quiz, loading: false });
-    } catch (error) {
-      console.log(error);
-    }
+  componentDidMount() {
+    this.props.fetchQuizById(this.props.router.params.id);
   }
 
   render() {
-    const { activeQuestion, quiz, results, answerState, loading } = this.state;
+    const { activeQuestion, quiz, results, answerState, loading, isFinished } =
+      this.props;
     return (
       <div className={styles.Quiz}>
         <div className={styles.QuizWrapper}>
           <h1>Ответьте на все вопросы</h1>
 
-          {loading ? (
+          {loading || quiz.length == 0 ? (
             <Loader />
-          ) : this.state.isFinished ? (
+          ) : isFinished ? (
             <FinishedQuiz
               results={results}
               quiz={quiz}
@@ -116,4 +100,17 @@ class Quiz extends Component {
   }
 }
 
-export default withRouter(Quiz);
+const mapStateToProps = (state) => ({
+  loading: state.quiz.loading,
+  results: state.quiz.results,
+  isFinished: state.quiz.isFinished,
+  activeQuestion: state.quiz.activeQuestion,
+  answerState: state.quiz.answerState,
+  quiz: state.quiz.quiz,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchQuizById: (id) => dispatch(fetchQuizById(id)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Quiz));
