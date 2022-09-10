@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout } from '../../store/actions/auth';
 
@@ -8,7 +8,7 @@ class Logout extends Component {
     this.props.logout();
   }
   render() {
-    return <Redirect to={'/'} />;
+    return <Navigate to={'/'} replace />;
   }
 }
 
