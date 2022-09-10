@@ -29,8 +29,8 @@ class App extends Component {
         <Routes>
           <Route path="/quiz-creator" element={<QuizCreator />} />
           <Route path="/quiz/:id" element={<Quiz />} />
-          <Route path="/" element={<QuizList />} />
           <Route path="/logout" element={<Logout />} />
+          <Route path="/" element={<QuizList />} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
